@@ -1,4 +1,4 @@
-use crate::enum_values::EnumValues;
+use crate::utils::EnumValues;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum Color {

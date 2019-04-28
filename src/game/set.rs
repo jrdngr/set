@@ -1,4 +1,4 @@
-use crate::card::Card;
+use crate::pieces::Card;
 
 pub struct Set(Card, Card, Card);
 
@@ -68,7 +68,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::card::{Color, Count, Fill, Shape};
+    use crate::pieces::{Color, Count, Fill, Shape};
 
     fn card_1() -> Card {
         Card::new(Color::Red, Shape::Squiggle, Fill::Solid, Count::One)

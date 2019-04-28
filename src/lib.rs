@@ -1,12 +1,8 @@
-pub mod board;
-pub mod card;
-pub mod deck;
-pub mod enum_values;
-pub mod set;
+pub mod game;
+pub mod pieces;
+pub mod utils;
 
 pub mod prelude {
-    pub use crate::board::Board;
-    pub use crate::card::{Card, Color, Count, Fill, Shape};
-    pub use crate::deck::Deck;
-    pub use crate::set::Set;
+    pub use crate::game::{Board, Set};
+    pub use crate::pieces::{Card, Color, Count, Deck, Fill, Shape};
 }

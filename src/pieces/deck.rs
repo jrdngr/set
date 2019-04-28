@@ -1,5 +1,5 @@
-use crate::enum_values::EnumValues;
 use crate::prelude::*;
+use crate::utils::EnumValues;
 use rand::{seq::SliceRandom, thread_rng};
 
 pub struct Deck {
