@@ -60,3 +60,17 @@ impl Card {
         self.count
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn build() {
+        let card = Card::new(Color::Green, Shape::Oval, Fill::Empty, Count::Three);
+        assert_eq!(card.color(), Color::Green);
+        assert_eq!(card.shape(), Shape::Oval);
+        assert_eq!(card.fill(), Fill::Empty);
+        assert_eq!(card.count(), Count::Three);
+    }
+}
