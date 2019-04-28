@@ -11,12 +11,16 @@ impl Deck {
         &self.cards
     }
 
-    pub fn shuffle(&mut self) {
-        self.cards.shuffle(&mut thread_rng());
+    pub fn num_remaining(&self) -> usize {
+        self.cards.len()
     }
 
-    pub fn remaining(&self) -> usize {
-        self.cards.len()
+    pub fn draw(&mut self) -> Option<Card> {
+        self.cards.pop()
+    }
+
+    pub fn shuffle(&mut self) {
+        self.cards.shuffle(&mut thread_rng());
     }
 }
 
@@ -35,5 +39,28 @@ impl Default for Deck {
         }
 
         Self { cards }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_construction() {
+        let deck = Deck::default();
+        assert_eq!(deck.num_remaining(), 81);
+    }
+
+    #[test]
+    fn test_draw() {
+        let mut deck = Deck::default();
+        deck.shuffle();
+        assert_eq!(deck.num_remaining(), 81);
+        let _ = deck.draw();
+        assert_eq!(deck.num_remaining(), 80);
+        let _ = deck.draw();
+        assert_eq!(deck.num_remaining(), 79);
+        let _ = deck.draw();
     }
 }
