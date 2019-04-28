@@ -1,32 +1,58 @@
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+use crate::enum_values::EnumValues;
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum Color {
     Red,
     Green,
     Purple,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+impl EnumValues for Color {
+    fn values() -> Vec<Self> {
+        vec![Color::Red, Color::Green, Color::Purple]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum Shape {
     Squiggle,
     Oval,
     Rectangle,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+impl EnumValues for Shape {
+    fn values() -> Vec<Self> {
+        vec![Shape::Squiggle, Shape::Oval, Shape::Rectangle]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum Fill {
     Solid,
     Striped,
     Empty,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+impl EnumValues for Fill {
+    fn values() -> Vec<Self> {
+        vec![Fill::Solid, Fill::Striped, Fill::Empty]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 pub enum Count {
     One,
     Two,
     Three,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+impl EnumValues for Count {
+    fn values() -> Vec<Self> {
+        vec![Count::One, Count::Two, Count::Three]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Card {
     color: Color,
     shape: Shape,
