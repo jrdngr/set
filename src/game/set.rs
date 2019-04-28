@@ -1,17 +1,13 @@
 use crate::pieces::Card;
 
-pub struct Set(Card, Card, Card);
+pub struct Set(pub Card, pub Card, pub Card);
 
 impl Set {
-    pub fn new(card1: Card, card2: Card, card3: Card) -> Option<Self> {
-        if card1 == card2 || card1 == card3 || card2 == card3 {
-            None
-        } else {
-            Some(Self(card1, card2, card3))
+    pub fn is_valid(&self) -> bool {
+        if self.0 == self.1 || self.0 == self.2 || self.1 == self.2 {
+            return false;
         }
-    }
 
-    pub fn is_valid_set(&self) -> bool {
         self.element_valid(Card::color)
             && self.element_valid(Card::shape)
             && self.element_valid(Card::fill)
@@ -84,10 +80,10 @@ mod tests {
     }
 
     fn good_set() -> Set {
-        Set::new(card_1(), card_2(), card_3()).unwrap()
+        Set(card_1(), card_2(), card_3())
     }
     fn bad_set() -> Set {
-        Set::new(card_1(), card_2(), card_3_bad()).unwrap()
+        Set(card_1(), card_2(), card_3_bad())
     }
 
     #[test]
@@ -132,21 +128,11 @@ mod tests {
 
     #[test]
     fn test_validation_good() {
-        assert!(good_set().is_valid_set());
+        assert!(good_set().is_valid());
     }
 
     #[test]
     fn test_validation_bad() {
-        assert!(!bad_set().is_valid_set());
-    }
-
-    #[test]
-    fn test_good_construction() {
-        assert!(Set::new(card_1(), card_2(), card_3()).is_some())
-    }
-
-    #[test]
-    fn test_bad_construction() {
-        assert!(Set::new(card_1(), card_1(), card_2()).is_none())
+        assert!(!bad_set().is_valid());
     }
 }
