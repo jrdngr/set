@@ -19,6 +19,10 @@ impl Board {
         &self.cards
     }
 
+    pub fn card_count(&self) -> usize {
+        self.cards.len()
+    }
+
     pub fn get_set_by_index(&mut self, card_1: usize, card_2: usize, card_3: usize) -> Option<Set> {
         let card_1 = self.cards.remove(card_1);
         let card_2 = self.cards.remove(card_2);
@@ -26,7 +30,7 @@ impl Board {
 
         let set = Set(card_1, card_2, card_3);
 
-        if set.is_valid() {
+        if set.is_valid_set() {
             Some(set)
         } else {
             None
@@ -44,6 +48,8 @@ impl Board {
                     if i == j || i == k || j == k {
                         continue;
                     }
+
+                    Set::is_valid(&self.cards[i], &self.cards[j], &self.cards[k]);
                 }
             }
         }
@@ -54,6 +60,14 @@ impl Board {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn test() {}
+    fn test_add_card() {
+        let deck = Deck::default();
+        let mut board = Board::default();
+
+        deck.take(3).for_each(|c| board.add_card(c));
+        assert_eq!(board.card_count(), 3);
+    }
 }

@@ -2,46 +2,62 @@ use crate::pieces::Card;
 
 pub struct Set(pub Card, pub Card, pub Card);
 
+type Triple<'a> = (&'a Card, &'a Card, &'a Card);
+
 impl Set {
-    pub fn is_valid(&self) -> bool {
+    pub fn is_valid(card_1: &Card, card_2: &Card, card_3: &Card) -> bool {
+        let cards = (card_1, card_2, card_3);
+
+        Self::element_valid(cards, Card::color)
+            && Self::element_valid(cards, Card::shape)
+            && Self::element_valid(cards, Card::fill)
+            && Self::element_valid(cards, Card::count)
+    }
+
+    pub fn into_tuple(self) -> (Card, Card, Card) {
+        (self.0, self.1, self.2)
+    }
+
+    pub fn to_tuple_ref(&self) -> (&Card, &Card, &Card) {
+        (&self.0, &self.1, &self.2)
+    }
+
+    pub fn is_valid_set(&self) -> bool {
         if self.0 == self.1 || self.0 == self.2 || self.1 == self.2 {
             return false;
         }
 
-        self.element_valid(Card::color)
-            && self.element_valid(Card::shape)
-            && self.element_valid(Card::fill)
-            && self.element_valid(Card::count)
+        Self::is_valid(&self.0, &self.1, &self.2)
     }
 
-    fn element_valid<T, F>(&self, extractor: F) -> bool
+    fn element_valid<T, F>(cards: Triple, extractor: F) -> bool
     where
         F: Fn(&Card) -> T + Clone,
         T: Eq,
     {
-        self.element_same(extractor.clone()) || self.element_different(extractor)
+        Self::element_same(cards, extractor.clone()) || Self::element_different(cards, extractor)
     }
 
-    fn element_same<T, F>(&self, extractor: F) -> bool
+    fn element_same<T, F>(cards: Triple, extractor: F) -> bool
     where
         F: Fn(&Card) -> T,
         T: Eq,
     {
-        let t1 = extractor(&self.0);
-        let t2 = extractor(&self.1);
-        let t3 = extractor(&self.2);
+        let t1 = extractor(&cards.0);
+        let t2 = extractor(&cards.1);
+        let t3 = extractor(&cards.2);
 
         threequal(t1, t2, t3)
     }
 
-    fn element_different<T, F>(&self, extractor: F) -> bool
+    fn element_different<T, F>(cards: Triple, extractor: F) -> bool
     where
         F: Fn(&Card) -> T,
         T: Eq,
     {
-        let t1 = extractor(&self.0);
-        let t2 = extractor(&self.1);
-        let t3 = extractor(&self.2);
+        let t1 = extractor(&cards.0);
+        let t2 = extractor(&cards.1);
+        let t3 = extractor(&cards.2);
 
         thrifferent(t1, t2, t3)
     }
@@ -108,31 +124,37 @@ mod tests {
 
     #[test]
     fn test_element_same() {
-        assert!(good_set().element_same(Card::shape));
+        assert!(Set::element_same(good_set().to_tuple_ref(), Card::shape));
     }
 
     #[test]
     fn test_element_different() {
-        assert!(good_set().element_different(Card::color));
+        assert!(Set::element_different(
+            good_set().to_tuple_ref(),
+            Card::color
+        ));
     }
 
     #[test]
     fn test_element_not_same() {
-        assert!(!good_set().element_same(Card::color));
+        assert!(!Set::element_same(good_set().to_tuple_ref(), Card::color));
     }
 
     #[test]
     fn test_element_not_different() {
-        assert!(!good_set().element_different(Card::count));
+        assert!(!Set::element_different(
+            good_set().to_tuple_ref(),
+            Card::count
+        ));
     }
 
     #[test]
     fn test_validation_good() {
-        assert!(good_set().is_valid());
+        assert!(good_set().is_valid_set());
     }
 
     #[test]
     fn test_validation_bad() {
-        assert!(!bad_set().is_valid());
+        assert!(!bad_set().is_valid_set());
     }
 }

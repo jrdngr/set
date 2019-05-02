@@ -24,6 +24,14 @@ impl Deck {
     }
 }
 
+impl Iterator for Deck {
+    type Item = Card;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.draw()
+    }
+}
+
 impl Default for Deck {
     fn default() -> Self {
         let mut cards = Vec::new();
